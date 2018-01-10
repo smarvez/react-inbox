@@ -13,10 +13,11 @@ class App extends Component {
     }
   }
 
-  toggleRead = (message) => {
+  toggleClass = (event, message, nameOfClass) => {
+    event.stopPropagation()
     const index = this.state.messages.indexOf(message)
     let newMessages = this.state.messages.slice(0)
-    newMessages[index].read = !newMessages[index].read
+    newMessages[index][nameOfClass] = !newMessages[index][nameOfClass]
     this.setState({messages:newMessages})
   }
 
@@ -26,7 +27,7 @@ class App extends Component {
         <Navbar />
         <div className='container'>
           <Toolbar />
-          <MessagesList messages={this.state.messages} toggleRead = {this.toggleRead}/>
+          <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}/>
         </div>
 
       </div>
