@@ -17,11 +17,11 @@ const Toolbar = (props) => {
           Mark As Read
         </button>
 
-        <button className="btn btn-default" >
+        <button className="btn btn-default" onClick={()=>{props.markUnread()}}>
           Mark As Unread
         </button>
 
-        <select className="form-control label-select" >
+        <select className="form-control label-select" onChange={(event)=>{props.applyLabel(event.target.value)}}>
           <option>Apply label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>

@@ -42,8 +42,31 @@ class App extends Component {
     let newMessages = this.state.messages.map(message => {
       if(message.selected == true) {
         message.read = true
+        message.selected = false
       }
-      return message  
+      return message
+    })
+    this.setState({messages:newMessages})
+  }
+
+  markUnread = () => {
+    let newMessages = this.state.messages.map(message => {
+      if(message.selected == true) {
+        message.read = false
+        message.selected = false
+      }
+      return message
+    })
+    this.setState({messages:newMessages})
+  }
+
+  applyLabel = (value) => {
+    let newMessages = this.state.messages.map(message => {
+      if(message.selected == true) {
+        message.labels.push(value)
+        message.selected = false
+      }
+      return message
     })
     this.setState({messages:newMessages})
   }
@@ -55,7 +78,9 @@ class App extends Component {
         <div className='container'>
           <Toolbar messages={this.state.messages}
           selectAll = {this.selectAll}
-          markAllRead = {this.markAllRead}/>
+          markAllRead = {this.markAllRead}
+          markUnread = {this.markUnread}
+          applyLabel = {this.applyLabel}/>
           <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}/>
         </div>
 
