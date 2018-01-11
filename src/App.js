@@ -89,8 +89,8 @@ class App extends Component {
     deleteMessages.forEach(message => {
       let i = newMessages.indexOf(message)
       newMessages.splice(i, 1)
+      return newMessages
     })
-    return newMessages
     this.setState({messages:newMessages})
   }
 
