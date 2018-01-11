@@ -1,6 +1,9 @@
 import React from 'react'
 
 const Toolbar = (props) => {
+
+  const checkbox = props.messages.filter(message => (message.selected === true)).length < props.messages.length ? "fa fa-square-o" : "fa fa-check-square"
+
   return (
     <div className="row toolbar">
       <div className="col-md-12">
@@ -10,7 +13,7 @@ const Toolbar = (props) => {
         </p>
 
         <button className="btn btn-default" onClick={()=>{props.selectAll()}}>
-          <i className="fa fa-square-o"></i>
+          <i className={`${checkbox}`}></i>
         </button>
 
         <button className="btn btn-default" onClick={()=>{props.markAllRead()}}>
