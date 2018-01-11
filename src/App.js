@@ -23,7 +23,7 @@ class App extends Component {
 
   selectAll = () => {
     let newMessages = this.state.messages
-    if (newMessages.filter(message => (message.selected == true)).length == 8) {
+    if (newMessages.filter(message => (message.selected === true)).length === 8) {
       let selectAllFalse = newMessages.map(message => {
         message.selected = false;
         return message;
@@ -40,7 +40,7 @@ class App extends Component {
 
   markAllRead = () => {
     let newMessages = this.state.messages.map(message => {
-      if(message.selected == true) {
+      if(message.selected === true) {
         message.read = true
         message.selected = false
       }
@@ -51,7 +51,7 @@ class App extends Component {
 
   markUnread = () => {
     let newMessages = this.state.messages.map(message => {
-      if(message.selected == true) {
+      if(message.selected === true) {
         message.read = false
         message.selected = false
       }
@@ -62,12 +62,35 @@ class App extends Component {
 
   applyLabel = (value) => {
     let newMessages = this.state.messages.map(message => {
-      if(message.selected == true) {
+      if(message.selected === true) {
         message.labels.push(value)
         message.selected = false
       }
       return message
     })
+    this.setState({messages:newMessages})
+  }
+
+  removeLabel = (value) => {
+    let newMessages = this.state.messages.map(message => {
+      if(message.selected === true) {
+        let i = message.labels.indexOf(value)
+        message.labels.splice(i, 1)
+        message.selected = false
+      }
+      return message
+    })
+    this.setState({messages:newMessages})
+  }
+
+  deleteMessage = () => {
+    let newMessages = this.state.messages
+    let deleteMessages = newMessages.filter(message => (message.selected === true))
+    deleteMessages.forEach(message => {
+      let i = newMessages.indexOf(message)
+      newMessages.splice(i, 1)
+    })
+    return newMessages
     this.setState({messages:newMessages})
   }
 
@@ -80,7 +103,9 @@ class App extends Component {
           selectAll = {this.selectAll}
           markAllRead = {this.markAllRead}
           markUnread = {this.markUnread}
-          applyLabel = {this.applyLabel}/>
+          applyLabel = {this.applyLabel}
+          removeLabel = {this.removeLabel}
+          deleteMessage = {this.deleteMessage}/>
           <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}/>
         </div>
 
