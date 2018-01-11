@@ -94,6 +94,11 @@ class App extends Component {
     this.setState({messages:newMessages})
   }
 
+  updateUnread = () => {
+    let newMessages = this.state.messages
+    
+  }
+
   render() {
     return (
       <div className="App">
