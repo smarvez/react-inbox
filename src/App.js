@@ -21,12 +21,41 @@ class App extends Component {
     this.setState({messages:newMessages})
   }
 
+  selectAll = () => {
+    let newMessages = this.state.messages
+    if (newMessages.filter(message => (message.selected == true)).length == 8) {
+      let selectAllFalse = newMessages.map(message => {
+        message.selected = false;
+        return message;
+      })
+      this.setState({messages:selectAllFalse})
+    } else {
+      let selectAllTrue = newMessages.map(message => {
+        message.selected = true;
+        return message;
+      })
+      this.setState({messages:selectAllTrue})
+    }
+  }
+
+  markAllRead = () => {
+    let newMessages = this.state.messages.map(message => {
+      if(message.selected == true) {
+        message.read = true
+      }
+      return message  
+    })
+    this.setState({messages:newMessages})
+  }
+
   render() {
     return (
       <div className="App">
         <Navbar />
         <div className='container'>
-          <Toolbar />
+          <Toolbar messages={this.state.messages}
+          selectAll = {this.selectAll}
+          markAllRead = {this.markAllRead}/>
           <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}/>
         </div>
 
