@@ -4,13 +4,33 @@ import './App.css';
 import MessagesList from './Components/MessageList';
 import Toolbar from './Components/Toolbar';
 import Navbar from './Components/Navbar';
+import Compose from './Components/Compose';
+
 
 class App extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      messages: this.props.messages
-    }
+  state = {
+    messages: [],
+    clicked: false
+  }
+
+  async componentDidMount() {
+    const response = await fetch('http://localhost:8082/api/messages')
+    const json = await response.json()
+    console.log(json);
+    this.setState({messages: json._embedded.messages})
+  }
+
+  async createItem() {
+    const response = await fetch('http://localhost:8082/api/messages', {
+      method: 'POST',
+      body: JSON.stringify(message),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
+    })
+    const message = await response.json()
+    this.setState({messages: [...this.state.messages, message]})
   }
 
   toggleClass = (event, message, nameOfClass) => {
@@ -96,7 +116,14 @@ class App extends Component {
 
   updateUnread = () => {
     let newMessages = this.state.messages
-    
+
+  }
+
+  composeNew = () => {
+    let composeClicked = this.state.clicked
+    composeClicked = !composeClicked
+    this.setState({clicked: composeClicked})
+    console.log(this.state.clicked);
   }
 
   render() {
@@ -110,7 +137,9 @@ class App extends Component {
           markUnread = {this.markUnread}
           applyLabel = {this.applyLabel}
           removeLabel = {this.removeLabel}
-          deleteMessage = {this.deleteMessage}/>
+          deleteMessage = {this.deleteMessage}
+          composeNew = {this.composeNew}/>
+          <Compose composeNew = {this.composeNew} clicked = {this.state.clicked}/>
           <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}/>
         </div>
 
