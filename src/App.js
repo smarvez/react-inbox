@@ -28,7 +28,6 @@ class App extends Component {
   }
 
   composeMessage = async (body, method) => {
-    console.log('ok');
     const response = await fetch('http://localhost:8082/api/messages', {
       method: method,
       body: JSON.stringify(body),
@@ -54,24 +53,19 @@ class App extends Component {
     this.setState({messages: json._embedded.messages})
   }
 
-  // async createItem(value) {
-  //   console.log('MessageBody: ', value);
-  //   // event.preventDefault();
-  //   // const response = await fetch('http://localhost:8082/api/messages', {
-  //   //   method: 'POST',
-  //   //   body: JSON.stringify(),
-  //   //   headers: {
-  //   //     'Content-Type': 'application/json',
-  //   //     'Accept': 'application/json',
-  //   //   }
-  //   // })
-  //   // const message = await response.json()
-  //   // console.log(message);
-  //   // this.setState({messages: [...this.state.messages, message]})
-  // }
+  async updateMessage (body, method) {
+    await fetch('http://localhost:8082/api/messages', {
+     method: method,
+     body: JSON.stringify(body),
+     headers: {
+       'Content-Type': 'application/json',
+       'Accept': 'application/json',
+     }
+   })
+ }
 
-  toggleClass = (event, message, nameOfClass) => {
-    event.stopPropagation()
+  toggleClass = (message, nameOfClass) => {
+    // event.stopPropagation()
     const index = this.state.messages.indexOf(message)
     let newMessages = this.state.messages.slice(0)
     newMessages[index][nameOfClass] = !newMessages[index][nameOfClass]
@@ -183,7 +177,8 @@ class App extends Component {
           createItem = {this.createItem}
           handleSubject = {this.handleSubject}
           handleBody = {this.handleBody}/>
-          <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}/>
+          <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}
+          updateMessage = {this.updateMessage}/>
         </div>
       </div>
     );
