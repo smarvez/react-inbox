@@ -5,12 +5,46 @@ import MessagesList from './Components/MessageList';
 import Toolbar from './Components/Toolbar';
 import Navbar from './Components/Navbar';
 import Compose from './Components/Compose';
-
+const api = 'http://localhost:8082/api/messages'
 
 class App extends Component {
   state = {
     messages: [],
-    clicked: false
+    clicked: false,
+    subject: '',
+    bodyContent: '',
+  }
+
+  handleSubject = (event) => {
+    let subject = event.target.value
+    this.setState({'subject': subject})
+    console.log(this.state);
+  }
+
+  handleBody = (event) => {
+    let bodyContent = event.target.value
+    this.setState({'body': bodyContent})
+    console.log(this.state);
+  }
+
+  composeMessage = async (body, method) => {
+    console.log('ok');
+    const response = await fetch('http://localhost:8082/api/messages', {
+      method: method,
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
+    const newMessage = await response.json()
+    console.log(newMessage);
+    this.setState({
+      messages: [
+        newMessage,
+        ...this.state.messages
+      ]
+    })
   }
 
   async componentDidMount() {
@@ -20,18 +54,21 @@ class App extends Component {
     this.setState({messages: json._embedded.messages})
   }
 
-  async createItem() {
-    const response = await fetch('http://localhost:8082/api/messages', {
-      method: 'POST',
-      body: JSON.stringify(message),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    })
-    const message = await response.json()
-    this.setState({messages: [...this.state.messages, message]})
-  }
+  // async createItem(value) {
+  //   console.log('MessageBody: ', value);
+  //   // event.preventDefault();
+  //   // const response = await fetch('http://localhost:8082/api/messages', {
+  //   //   method: 'POST',
+  //   //   body: JSON.stringify(),
+  //   //   headers: {
+  //   //     'Content-Type': 'application/json',
+  //   //     'Accept': 'application/json',
+  //   //   }
+  //   // })
+  //   // const message = await response.json()
+  //   // console.log(message);
+  //   // this.setState({messages: [...this.state.messages, message]})
+  // }
 
   toggleClass = (event, message, nameOfClass) => {
     event.stopPropagation()
@@ -123,7 +160,6 @@ class App extends Component {
     let composeClicked = this.state.clicked
     composeClicked = !composeClicked
     this.setState({clicked: composeClicked})
-    console.log(this.state.clicked);
   }
 
   render() {
@@ -139,10 +175,16 @@ class App extends Component {
           removeLabel = {this.removeLabel}
           deleteMessage = {this.deleteMessage}
           composeNew = {this.composeNew}/>
-          <Compose composeNew = {this.composeNew} clicked = {this.state.clicked}/>
+          <Compose composeNew = {this.composeNew}
+          composeMessage = {this.composeMessage}
+          clicked = {this.state.clicked}
+          subject = {this.state.subject}
+          bodyContent = {this.state.bodyContent}
+          createItem = {this.createItem}
+          handleSubject = {this.handleSubject}
+          handleBody = {this.handleBody}/>
           <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}/>
         </div>
-
       </div>
     );
   }

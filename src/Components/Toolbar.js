@@ -1,5 +1,4 @@
 import React from 'react';
-import Compose from './Compose';
 
 const Toolbar = ({messages, selectAll, markAllRead, markUnread, applyLabel, removeLabel, deleteMessage, composeNew}) => {
 
