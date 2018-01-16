@@ -28,14 +28,41 @@ const Toolbar = ({message, messages, selectAll, markAllRead, markUnread, applyLa
           Mark As Unread
         </button>
 
-        <select className="form-control label-select" onChange={(event)=>{applyLabel(event.target.value)}}>
+        <select className="form-control label-select" onChange={(event)=>{
+          const body = {
+            'messageIds': [],
+            'command': 'addLabel',
+            'label': []
+          }
+          const newMessages = messages.map(message => {
+            if(message.selected === true){
+              body.messageIds.push(message.id)
+              body.label.push(event.target.value)
+            }})
+            updateMessage(body, 'PATCH')
+            applyLabel(event.target.value)}}>
           <option>Apply label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
           <option value="gschool">gschool</option>
         </select>
 
-        <select className="form-control label-select" onChange={(event)=>{removeLabel(event.target.value)}}>
+        <select className="form-control label-select" onChange={(event)=>{
+          const body = {
+            'messageIds': [],
+            'command': 'removeLabel',
+            'label': []
+          }
+          const newMessages = messages.map(message=>{
+            if(message.selected === true){
+              body.messageIds.push(message.id)
+              let index = body.label.indexOf(event.target.value)
+              body.label.splice(index, 1)
+            }
+            return body
+          })
+          updateMessage(body, 'PATCH')
+          removeLabel(event.target.value)}}>
           <option>Remove label</option>
           <option value="dev">dev</option>
           <option value="personal">personal</option>
