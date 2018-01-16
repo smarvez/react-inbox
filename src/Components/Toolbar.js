@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Toolbar = ({messages, selectAll, markAllRead, markUnread, applyLabel, removeLabel, deleteMessage, composeNew}) => {
+const Toolbar = ({message, messages, selectAll, markAllRead, markUnread, applyLabel, removeLabel, deleteMessage, composeNew, updateMessage}) => {
 
   const checkbox = messages.filter(message => (message.selected === true)).length < messages.length ? "fa fa-square-o" : "fa fa-check-square"
 
@@ -42,7 +42,19 @@ const Toolbar = ({messages, selectAll, markAllRead, markUnread, applyLabel, remo
           <option value="gschool">gschool</option>
         </select>
 
-        <button className="btn btn-default" onClick={()=>{deleteMessage()}}>
+        <button className="btn btn-default" onClick={()=>{
+          const body = {
+            'messageIds': [],
+            'command': 'delete'
+          }
+          const newMessages = messages.map(message => {
+            if(message.selected === true){
+              body.messageIds.push(message.id)
+            }
+          })
+          updateMessage(body, 'PATCH')
+          deleteMessage()
+          }}>
           <i className="fa fa-trash-o"></i>
         </button>
       </div>

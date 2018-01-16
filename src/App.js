@@ -18,13 +18,11 @@ class App extends Component {
   handleSubject = (event) => {
     let subject = event.target.value
     this.setState({'subject': subject})
-    console.log(this.state);
   }
 
   handleBody = (event) => {
     let bodyContent = event.target.value
     this.setState({'body': bodyContent})
-    console.log(this.state);
   }
 
   composeMessage = async (body, method) => {
@@ -37,7 +35,6 @@ class App extends Component {
       }
     })
     const newMessage = await response.json()
-    console.log(newMessage);
     this.setState({
       messages: [
         newMessage,
@@ -49,7 +46,6 @@ class App extends Component {
   async componentDidMount() {
     const response = await fetch('http://localhost:8082/api/messages')
     const json = await response.json()
-    console.log(json);
     this.setState({messages: json._embedded.messages})
   }
 
@@ -168,7 +164,8 @@ class App extends Component {
           applyLabel = {this.applyLabel}
           removeLabel = {this.removeLabel}
           deleteMessage = {this.deleteMessage}
-          composeNew = {this.composeNew}/>
+          composeNew = {this.composeNew}
+          updateMessage = {this.updateMessage}/>
           <Compose composeNew = {this.composeNew}
           composeMessage = {this.composeMessage}
           clicked = {this.state.clicked}
