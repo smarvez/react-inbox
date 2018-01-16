@@ -50,6 +50,7 @@ class App extends Component {
   }
 
   async updateMessage (body, method) {
+    console.log(body);
     await fetch('http://localhost:8082/api/messages', {
      method: method,
      body: JSON.stringify(body),
@@ -119,6 +120,7 @@ class App extends Component {
   }
 
   removeLabel = (value) => {
+    console.log(value);
     let newMessages = this.state.messages.map(message => {
       if(message.selected === true) {
         let i = message.labels.indexOf(value)

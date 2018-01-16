@@ -32,13 +32,15 @@ const Toolbar = ({message, messages, selectAll, markAllRead, markUnread, applyLa
           const body = {
             'messageIds': [],
             'command': 'addLabel',
-            'label': []
+            'label': ''
           }
-          const newMessages = messages.map(message => {
+          messages.map(message => {
             if(message.selected === true){
               body.messageIds.push(message.id)
-              body.label.push(event.target.value)
-            }})
+              body.label = event.target.value
+            }
+            return body
+          })
             updateMessage(body, 'PATCH')
             applyLabel(event.target.value)}}>
           <option>Apply label</option>
@@ -51,13 +53,14 @@ const Toolbar = ({message, messages, selectAll, markAllRead, markUnread, applyLa
           const body = {
             'messageIds': [],
             'command': 'removeLabel',
-            'label': []
+            'label': ''
           }
-          const newMessages = messages.map(message=>{
+          messages.map(message=>{
             if(message.selected === true){
               body.messageIds.push(message.id)
-              let index = body.label.indexOf(event.target.value)
-              body.label.splice(index, 1)
+              body.label = event.target.value
+              // let index = body.label.indexOf(event.target.value)
+              // body.label.splice(index, 1)
             }
             return body
           })
@@ -74,10 +77,11 @@ const Toolbar = ({message, messages, selectAll, markAllRead, markUnread, applyLa
             'messageIds': [],
             'command': 'delete'
           }
-          const newMessages = messages.map(message => {
+          messages.map(message => {
             if(message.selected === true){
               body.messageIds.push(message.id)
             }
+            return body
           })
           updateMessage(body, 'PATCH')
           deleteMessage()
