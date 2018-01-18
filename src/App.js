@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
 import logo from './logo.svg';
 import './App.css';
 import MessagesList from './Components/MessageList';
 import Toolbar from './Components/Toolbar';
-import Navbar from './Components/Navbar';
 import Compose from './Components/Compose';
 const api = 'http://localhost:8082/api/messages'
 
@@ -26,7 +30,7 @@ class App extends Component {
   }
 
   composeMessage = async (body, method) => {
-    const response = await fetch('http://localhost:8082/api/messages', {
+    const response = await fetch(api, {
       method: method,
       body: JSON.stringify(body),
       headers: {
@@ -44,14 +48,13 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    const response = await fetch('http://localhost:8082/api/messages')
+    const response = await fetch(api)
     const json = await response.json()
     this.setState({messages: json._embedded.messages})
   }
 
   async updateMessage (body, method) {
-    console.log(body);
-    await fetch('http://localhost:8082/api/messages', {
+    await fetch(api, {
      method: method,
      body: JSON.stringify(body),
      headers: {
@@ -145,7 +148,6 @@ class App extends Component {
 
   updateUnread = () => {
     let newMessages = this.state.messages
-
   }
 
   composeNew = () => {
@@ -156,30 +158,51 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <Navbar />
-        <div className='container'>
-          <Toolbar messages={this.state.messages}
-          selectAll = {this.selectAll}
-          markAllRead = {this.markAllRead}
-          markUnread = {this.markUnread}
-          applyLabel = {this.applyLabel}
-          removeLabel = {this.removeLabel}
-          deleteMessage = {this.deleteMessage}
-          composeNew = {this.composeNew}
-          updateMessage = {this.updateMessage}/>
-          <Compose composeNew = {this.composeNew}
-          composeMessage = {this.composeMessage}
-          clicked = {this.state.clicked}
-          subject = {this.state.subject}
-          bodyContent = {this.state.bodyContent}
-          createItem = {this.createItem}
-          handleSubject = {this.handleSubject}
-          handleBody = {this.handleBody}/>
-          <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}
-          updateMessage = {this.updateMessage}/>
+      <Router>
+        <div className="App">
+          <div className='container'>
+            <Route exact path="/" render={()=>(
+              <div>
+                <Toolbar messages={this.state.messages}
+                clicked={this.state.clicked}
+                selectAll = {this.selectAll}
+                markAllRead = {this.markAllRead}
+                markUnread = {this.markUnread}
+                applyLabel = {this.applyLabel}
+                removeLabel = {this.removeLabel}
+                deleteMessage = {this.deleteMessage}
+                composeNew = {this.composeNew}
+                updateMessage = {this.updateMessage}/>
+                <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}
+                updateMessage = {this.updateMessage}/>
+              </div>
+            )} />
+            <Route path="/compose" render={()=>(
+              <div>
+                <Toolbar messages={this.state.messages}
+                selectAll = {this.selectAll}
+                markAllRead = {this.markAllRead}
+                markUnread = {this.markUnread}
+                applyLabel = {this.applyLabel}
+                removeLabel = {this.removeLabel}
+                deleteMessage = {this.deleteMessage}
+                composeNew = {this.composeNew}
+                updateMessage = {this.updateMessage}/>
+                <Compose composeNew = {this.composeNew}
+                composeMessage = {this.composeMessage}
+                clicked = {this.state.clicked}
+                subject = {this.state.subject}
+                bodyContent = {this.state.bodyContent}
+                createItem = {this.createItem}
+                handleSubject = {this.handleSubject}
+                handleBody = {this.handleBody}/>
+                <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}
+                updateMessage = {this.updateMessage}/>
+              </div>
+            )} />
+          </div>
         </div>
-      </div>
+      </Router>
     );
   }
 }

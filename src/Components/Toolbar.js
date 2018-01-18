@@ -1,6 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 
-const Toolbar = ({message, messages, selectAll, markAllRead, markUnread, applyLabel, removeLabel, deleteMessage, composeNew, updateMessage}) => {
+const Toolbar = ({message, messages, selectAll, markAllRead, markUnread, applyLabel, removeLabel, deleteMessage, composeNew, updateMessage, clicked, toggleCompose }) => {
+
+  toggleCompose = () => {
+    return clicked === false ? '/compose' : '/'
+  }
+
 
   const checkbox = messages.filter(message => (message.selected === true)).length < messages.length ? "fa fa-square-o" : "fa fa-check-square"
 
@@ -12,9 +18,9 @@ const Toolbar = ({message, messages, selectAll, markAllRead, markUnread, applyLa
           unread messages
         </p>
 
-        <a className="btn btn-danger" onClick={()=>{composeNew()}}>
+        <Link to={`${toggleCompose()}`} className="btn btn-danger" onClick={()=>{composeNew()}}>
           <i className="fa fa-plus"></i>
-        </a>
+        </Link>
 
         <button className="btn btn-default" onClick={()=>{selectAll()}}>
           <i className={`${checkbox}`}></i>
@@ -59,8 +65,6 @@ const Toolbar = ({message, messages, selectAll, markAllRead, markUnread, applyLa
             if(message.selected === true){
               body.messageIds.push(message.id)
               body.label = event.target.value
-              // let index = body.label.indexOf(event.target.value)
-              // body.label.splice(index, 1)
             }
             return body
           })
