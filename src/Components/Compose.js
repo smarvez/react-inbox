@@ -1,9 +1,4 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
 
 const Compose = ({composeMessage, clicked, createItem, handleSubject, handleBody, subject, bodyContent}) => {
   return(

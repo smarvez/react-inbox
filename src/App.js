@@ -9,14 +9,18 @@ import './App.css';
 import MessagesList from './Components/MessageList';
 import Toolbar from './Components/Toolbar';
 import Compose from './Components/Compose';
+import Body from './Components/Body';
 const api = 'http://localhost:8082/api/messages'
 
 class App extends Component {
   state = {
     messages: [],
     clicked: false,
+    openBody: false,
     subject: '',
     bodyContent: '',
+    bodyObj: {},
+    messageSelected: false
   }
 
   handleSubject = (event) => {
@@ -26,7 +30,7 @@ class App extends Component {
 
   handleBody = (event) => {
     let bodyContent = event.target.value
-    this.setState({'body': bodyContent})
+    this.setState({'bodyContent': bodyContent})
   }
 
   composeMessage = async (body, method) => {
@@ -51,6 +55,17 @@ class App extends Component {
     const response = await fetch(api)
     const json = await response.json()
     this.setState({messages: json._embedded.messages})
+  }
+
+  getBody = async (id) => {
+    const response = await fetch(`${api}/${id}`)
+    const json = await response.json()
+    const bodyObj = {
+      id: json.id,
+      body: json.body
+    }
+    console.log(bodyObj);
+    this.setState({bodyObj: bodyObj, messageSelected: true})
   }
 
   async updateMessage (body, method) {
@@ -174,7 +189,11 @@ class App extends Component {
                 composeNew = {this.composeNew}
                 updateMessage = {this.updateMessage}/>
                 <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}
-                updateMessage = {this.updateMessage}/>
+                updateMessage = {this.updateMessage}
+                getBody = {this.getBody}
+                bodyObj = {this.state.bodyObj}
+                messageSelected = {this.state.messageSelected}/>
+
               </div>
             )} />
             <Route path="/compose" render={()=>(
@@ -197,7 +216,9 @@ class App extends Component {
                 handleSubject = {this.handleSubject}
                 handleBody = {this.handleBody}/>
                 <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}
-                updateMessage = {this.updateMessage}/>
+                updateMessage = {this.updateMessage}
+                getBody = {this.getBody}
+                bodyObj = {this.state.bodyObj}/>
               </div>
             )} />
           </div>

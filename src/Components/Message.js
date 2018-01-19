@@ -1,11 +1,17 @@
-import React from 'react'
+import React from 'react';
+import Body from './Body';
+import { Link } from 'react-router-dom'
 
-const Message = ({message, toggleClass, updateMessage}) => {
+const Message = ({message, toggleClass, updateMessage, getBody, bodyObj, messageSelected}) => {
 
   const readClass = message.read ? 'read' : 'unread';
   const starClass  = message.starred ? 'star fa fa-star-o' : 'star fa fa-star';
   const boxClass = message.selected ? 'selected' : '';
   const checkedClass = message.selected ? 'checked' : '';
+
+  toggleMessage = () => {
+    return messageSelected === false ? `/${bodyObj.id}` : '/'
+  }
 
   return (
     <div className={`row message ${readClass} ${boxClass}`} onClick={(event)=>{
@@ -17,6 +23,7 @@ const Message = ({message, toggleClass, updateMessage}) => {
       }
       updateMessage(body, 'PATCH')
       toggleClass(message, 'read')
+      getBody(body.messageIds[0])
     }}>
       <div className="col-xs-1">
         <div className="row">
@@ -41,9 +48,12 @@ const Message = ({message, toggleClass, updateMessage}) => {
       <div className="col-xs-11">
         {message.labels.map((e, i) => <span key={i} className="label label-warning">{e}</span>)}
         <span className="label label-warning"></span>
-        <a href="#">
+        <Link to={`${toggleMessage()}`}>
           {message.subject}
-        </a>
+          <Body
+            bodyObj = {bodyObj}
+            message = {message} />
+        </Link>
       </div>
     </div>
   )
