@@ -64,7 +64,6 @@ class App extends Component {
       id: json.id,
       body: json.body
     }
-    console.log(bodyObj);
     this.setState({bodyObj: bodyObj, messageSelected: true})
   }
 
@@ -171,12 +170,18 @@ class App extends Component {
     this.setState({clicked: composeClicked})
   }
 
+  selectMessage = () => {
+    let messageClicked = this.state.messageSelected
+    messageClicked = !messageClicked
+    this.setState({messageSelected: messageClicked})
+  }
+
   render() {
     return (
       <Router>
         <div className="App">
           <div className='container'>
-            <Route exact path="/" render={()=>(
+            <Route path="/" render={()=>(
               <div>
                 <Toolbar messages={this.state.messages}
                 clicked={this.state.clicked}
@@ -188,25 +193,12 @@ class App extends Component {
                 deleteMessage = {this.deleteMessage}
                 composeNew = {this.composeNew}
                 updateMessage = {this.updateMessage}/>
-                <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}
-                updateMessage = {this.updateMessage}
-                getBody = {this.getBody}
-                bodyObj = {this.state.bodyObj}
-                messageSelected = {this.state.messageSelected}/>
+
 
               </div>
             )} />
             <Route path="/compose" render={()=>(
               <div>
-                <Toolbar messages={this.state.messages}
-                selectAll = {this.selectAll}
-                markAllRead = {this.markAllRead}
-                markUnread = {this.markUnread}
-                applyLabel = {this.applyLabel}
-                removeLabel = {this.removeLabel}
-                deleteMessage = {this.deleteMessage}
-                composeNew = {this.composeNew}
-                updateMessage = {this.updateMessage}/>
                 <Compose composeNew = {this.composeNew}
                 composeMessage = {this.composeMessage}
                 clicked = {this.state.clicked}
@@ -215,12 +207,16 @@ class App extends Component {
                 createItem = {this.createItem}
                 handleSubject = {this.handleSubject}
                 handleBody = {this.handleBody}/>
+              </div>
+            )} />
+              <div>
                 <MessagesList messages={this.state.messages} toggleClass = {this.toggleClass}
                 updateMessage = {this.updateMessage}
                 getBody = {this.getBody}
-                bodyObj = {this.state.bodyObj}/>
+                bodyObj = {this.state.bodyObj}
+                selectMessage = {this.selectMessage}
+                messageSelected = {this.state.messageSelected}/>
               </div>
-            )} />
           </div>
         </div>
       </Router>

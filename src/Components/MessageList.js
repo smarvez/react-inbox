@@ -1,7 +1,7 @@
 import React from 'react';
 import Message from './Message';
 
-const MessagesList = ({messages, toggleClass, updateMessage, getBody,  bodyObj, messageSelected}) => {
+const MessagesList = ({messages, toggleClass, updateMessage, getBody,  bodyObj, selectMessage, messageSelected}) => {
   return (
     <div>
       {messages.map(message => (
@@ -12,6 +12,7 @@ const MessagesList = ({messages, toggleClass, updateMessage, getBody,  bodyObj, 
           updateMessage = {updateMessage}
           getBody = {getBody}
           bodyObj = {bodyObj}
+          selectMessage = {selectMessage}
           messageSelected = {messageSelected}/>
         ))}
     </div>

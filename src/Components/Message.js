@@ -1,20 +1,18 @@
 import React from 'react';
 import Body from './Body';
-import { Link } from 'react-router-dom'
+import { Link, Route } from 'react-router-dom'
 
-const Message = ({message, toggleClass, updateMessage, getBody, bodyObj, messageSelected}) => {
+const Message = ({message, toggleClass, updateMessage, getBody, bodyObj, selectMessage, messageSelected}) => {
+const toggleMessage = !message.read ? `/messages/${message.id}` : '/'
+
 
   const readClass = message.read ? 'read' : 'unread';
   const starClass  = message.starred ? 'star fa fa-star-o' : 'star fa fa-star';
   const boxClass = message.selected ? 'selected' : '';
   const checkedClass = message.selected ? 'checked' : '';
 
-  toggleMessage = () => {
-    return messageSelected === false ? `/${bodyObj.id}` : '/'
-  }
-
   return (
-    <div className={`row message ${readClass} ${boxClass}`} onClick={(event)=>{
+    <Link to= {`${toggleMessage}`} className={`row message ${readClass} ${boxClass}`} onClick={(event)=>{
       event.stopPropagation()
       const body = {
         messageIds: [message.id],
@@ -24,6 +22,7 @@ const Message = ({message, toggleClass, updateMessage, getBody, bodyObj, message
       updateMessage(body, 'PATCH')
       toggleClass(message, 'read')
       getBody(body.messageIds[0])
+      selectMessage()
     }}>
       <div className="col-xs-1">
         <div className="row">
@@ -48,14 +47,17 @@ const Message = ({message, toggleClass, updateMessage, getBody, bodyObj, message
       <div className="col-xs-11">
         {message.labels.map((e, i) => <span key={i} className="label label-warning">{e}</span>)}
         <span className="label label-warning"></span>
-        <Link to={`${toggleMessage()}`}>
-          {message.subject}
-          <Body
-            bodyObj = {bodyObj}
-            message = {message} />
-        </Link>
+        <a href= '#a'>
+            {message.subject}
+          <Route path={`/messages/${message.id}`} render={() => (
+            <Body
+              bodyObj = {bodyObj}
+              message = {message}
+            />
+          )} />
+        </a>
       </div>
-    </div>
+    </Link>
   )
 }
 
