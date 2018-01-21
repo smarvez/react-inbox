@@ -54,6 +54,7 @@ class App extends Component {
   async componentDidMount() {
     const response = await fetch(api)
     const json = await response.json()
+    console.log(json);
     this.setState({messages: json._embedded.messages})
   }
 

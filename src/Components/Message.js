@@ -3,7 +3,8 @@ import Body from './Body';
 import { Link, Route } from 'react-router-dom'
 
 const Message = ({message, toggleClass, updateMessage, getBody, bodyObj, selectMessage, messageSelected}) => {
-const toggleMessage = !message.read ? `/messages/${message.id}` : '/'
+
+const toggleMessage = !message.read ? `/messages/${message.id}` : '/' 
 
 
   const readClass = message.read ? 'read' : 'unread';
